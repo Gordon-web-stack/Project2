@@ -3,9 +3,17 @@
 {% block body %}
 <h1>Create a new listing.</h1>
 <div>
-    <form action="">
+    <form method="POST" action="{% url 'create_listing' %}">
+        {% csrf_token %}
         <input type="text" placeholder="Item Title" name="item_name">
-        <input type="textfield" placeholder="Item Description" name="item_description">
+        <br></br>
+        <textarea id="item_description" name="item_description" rows="4" cols="50" placeholder="Item description"></textarea>
+        <br></br>
+        <input type="text" placeholder="Image URL" name="image_url">
+        <br></br>
+        <input type="number" placeholder="Starting Price" name="start_price">
+        <br></br>
+        <input type="Submit" value="Submit">
     </form>
 </div>
 {% endblock %}
