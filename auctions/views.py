@@ -4,12 +4,16 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import *
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    List_items = Listings.objects.all()
+    
+    return render(request, "auctions/index.html",{
+        "List" : List_items
 
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -30,11 +34,9 @@ def login_view(request):
     else:
         return render(request, "auctions/login.html")
 
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
 
 def register(request):
     if request.method == "POST":
@@ -61,3 +63,25 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+def New_Listing(request):
+   return render(request, "auctions/new_listing.html"
+   )
+
+def create_listing(request):
+    if request.method == "POST":
+        List_name = request.POST["item_name"]
+        List_description = request.POST["item_description"]
+        List_start_price = request.POST["start_price"]
+        List_image_url = request.POST["image_url"]
+
+            #DO a check if the listing already exists
+
+        Listing = Listings.objects.create(List_name = List_name, 
+        List_description = List_description,
+        List_start_price = List_start_price,
+        List_image_url = List_image_url
+        )
+
+        Listing.save()
+        return render(request, "auctions/index.html")
