@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
+import datetime
 from .models import *
 
 
@@ -80,8 +80,16 @@ def create_listing(request):
         Listing = Listings.objects.create(List_name = List_name, 
         List_description = List_description,
         List_start_price = List_start_price,
-        List_image_url = List_image_url
+        List_image_url = List_image_url,
+       
         )
 
         Listing.save()
         return render(request, "auctions/index.html")
+
+def listing(request, listing_ID):
+    Listing = Listings.objects.get(id    = listing_ID)
+    return render(request,"auctions/index.html",{
+        "List": Listing
+    }
+    )
