@@ -7,9 +7,10 @@ import datetime
 from .models import *
 
 
+
 def index(request):
     List_items = Listings.objects.all()
-    
+
     return render(request, "auctions/index.html",{
         "List" : List_items
 
@@ -87,9 +88,39 @@ def create_listing(request):
         Listing.save()
         return render(request, "auctions/index.html")
 
-def listing(request, listing_ID):
-    Listing = Listings.objects.get(id    = listing_ID)
-    return render(request,"auctions/index.html",{
-        "List": Listing
-    }
-    )
+def listing(request, id):
+        item = Listings.objects.filter(id = id)
+        count_item = 0
+        count_item = wishlist.objects.filter(user = request.user, item = id ).count()
+        return render(request,"auctions/listing.html",{
+        "List": item,
+        "count": count_item
+        })
+
+def categories(request):
+    List_items = Listings.objects.all()
+    
+    return render(request, "auctions/categories.html",{
+        "List" : List_items
+
+    })
+
+def wishlist_add(request,item_id):
+    item = Listings.objects.get(id = item_id)
+    Listing = Listings.objects.filter(id = item_id)
+    count_item = 0
+    count_item = wishlist.objects.filter(user = request.user, item = item ).count()
+    if count_item == 0:
+        resh = wishlist(item =item , user = request.user)
+        resh.save()
+        button = "remove from wishlist"
+    else:
+        wishlist.objects.filter(user = request.user, item = item ).delete()
+        button = "Add to wishlist"
+    
+    return render(request,"auctions/listing.html",{
+        "count":count_item,
+        "List": Listing,
+        "button_label":button
+        })
+    

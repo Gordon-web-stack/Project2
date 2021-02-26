@@ -12,7 +12,7 @@
 
 
     {% for item in List %}
-   <a href="{% url 'listing'  %}"} > <div id="listing_item" >
+   <a href="{% url 'listing' item.id %}"  > <div id="listing_item" >
         <div id = "item_details">
             <p>{{item.List_name}}</p>
             <p>{{item.List_description}}</p>
@@ -23,7 +23,10 @@
                 <div id = "image">
                 <img src={{item.List_image_url}} width="400" height="300" style="align-items:left;">     
                 </div> 
-            {% endif %}  
+            {% endif %} 
+
+           
+
         </div> </a>
     <br> 
     {%endfor%}

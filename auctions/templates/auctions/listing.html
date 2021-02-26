@@ -1,3 +1,34 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% block head %}
+    <head>
+    <link href="{% static 'auctions/index_styles.css' %}" rel="stylesheet">
+    </head>
+{% endblock %}
 {% block body %}
+
+    {% for item in List %}
+        <div id = "item_details">
+            <p>{{item.List_name}}</p>
+            <p>{{item.List_description}}</p>
+                <p>{{item.List_start_price}}</p>
+            <br>
+        </div>
+
+        {% if item.List_image_url != NULL %}
+            <div id = "image">
+            <img src={{item.List_image_url}} width="400" height="300" style="align-items:left;">     
+            </div> 
+        {% endif %} 
+
+        {% if user.is_authenticated %}
+            <br>  
+            <a href="{% url 'wishlist' item.id %}"> {{button_label}} </a>      
+        {% else %}
+            <b1>Loggin to add to wishlist</b1>
+        {% endif %}
+        </div>
+      
+    {%endfor%}
 
 {% endblock %}
