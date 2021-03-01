@@ -13,6 +13,11 @@
         <br></br>
         <input type="number" placeholder="Starting Price" name="start_price">
         <br></br>
+        <select name="categories" id="categories">
+            {%for label in categories%}
+                <option value={{label.category}}>{{label.category}}</option>
+            {% endfor%}
+        </select>
         <input type="Submit" value="Submit">
     </form>
 </div>
