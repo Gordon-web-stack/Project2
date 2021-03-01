@@ -11,5 +11,6 @@ urlpatterns = [
     path("create_listing", views.create_listing, name="create_listing"),
     path("listing/<str:id>", views.listing, name="listing" ),
     path("categories", views.categories, name="categories"),
-    path("wishlist/<str:item_id>", views.wishlist_add,name="wishlist")
+    path("wishlist/<str:item_id>", views.wishlist_add,name="wishlist"),
+    path("/<str:category_id>", views.find_category, name="find_category")
 ]

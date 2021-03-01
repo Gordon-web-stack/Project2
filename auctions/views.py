@@ -78,6 +78,8 @@ def create_listing(request):
         List_description = request.POST["item_description"]
         List_start_price = request.POST["start_price"]
         List_image_url = request.POST["image_url"]
+        List_category = request.POST["category_list"]
+        List_category_get = category_list.objects.get(id = List_category)
 
             #DO a check if the listing already exists
 
@@ -85,6 +87,7 @@ def create_listing(request):
         List_description = List_description,
         List_start_price = List_start_price,
         List_image_url = List_image_url,
+        List_category = List_category_get
        
         )
 
@@ -101,11 +104,21 @@ def listing(request, id):
         })
 
 def categories(request):
-    List_items = Listings.objects.all()
+    All_categories = category_list.objects.all()
     
     return render(request, "auctions/categories.html",{
-        "List" : List_items
+        "categories":All_categories
 
+    })
+
+def find_category(request,category_id):
+    item_list = Listings.objects.filter(List_category_id = category_id)
+    category_name = category_list.objects.get(id = category_id).categories
+    
+    return render(request, "auctions/items.html",{
+        "items":item_list,
+        "title": category_name,
+        "heading":"category : " + category_name
     })
 
 def wishlist_add(request,item_id):

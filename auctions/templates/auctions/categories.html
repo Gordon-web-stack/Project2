@@ -6,10 +6,12 @@
 </head>
 {% endblock %}
 {% block body %}
-{% for item in List %}
+{% for category in categories %}
 
 <ul>
-    <li>{{ item.List_category}}</li>
+    <li>
+        <a href="{% url 'find_category' category.id %}">{{category.categories}}</a>
+    </li>
 </ul>
 
 {%endfor%}
