@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+import datetime
 from .models import *
 
 
@@ -65,9 +66,9 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def New_Listing(request):
-    
+    Category_list = category_list.objects.all()
     return render(request, "auctions/new_listing.html",{
-       # "categories":category
+        "categories":Category_list
     }
     )
 

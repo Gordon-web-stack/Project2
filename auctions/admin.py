@@ -5,7 +5,7 @@ from .models import *
 class ListAdmin(admin.ModelAdmin):
     list_display = ("List_name", "List_description")
 class CatAdmin(admin.ModelAdmin):
-    categories_display = ("categories")
+    Category_display = ("categories")
 
 admin.site.register(Listings, ListAdmin)
-admin.site.register(categories,CatAdmin)
+admin.site.register(category_list,CatAdmin)
