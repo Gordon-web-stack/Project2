@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% block head %}
+<title>{{title}}</title>
+{% endblock %}
+{% block body %}
+
+<h2>{{heading}}</h2>
+    <br>
+
+
+    {% for item in items %}
+   <a href="{% url 'listing' item.id %}"  > <div id="listing_item" >
+        <div id = "item_details">
+            <p>{{item.List_name}}</p>
+            <p>{{item.List_description}}</p>
+                <p>{{item.List_start_price}}</p>
+            <br>
+        </div>
+            {% if item.List_image_url != NULL %}
+                <div id = "image">
+                <img src={{item.List_image_url}} width="400" height="300" style="align-items:left;">     
+                </div> 
+            {% endif %} 
+
+           
+
+        </div> </a>
+    <br> 
+    {%endfor%}
+{% endblock %}
