@@ -1,7 +1,13 @@
 {% extends "auctions/layout.html" %}
 {% load static %}
 {% block head %}
-<title>{{title}}</title>
+    <head>
+        <link href="{% static 'auctions/index_styles.css' %}" rel="stylesheet">
+        <title>
+            {{title}}
+        </title>
+    </head>
+
 {% endblock %}
 {% block body %}
 

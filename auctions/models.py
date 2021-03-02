@@ -22,3 +22,8 @@ class Listings(models.Model):
 class wishlist(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="user_id")
     item = models.ForeignKey(Listings,on_delete=models.CASCADE,related_name="item_id")
+
+class bids(models.Model):
+    bid_user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="bid_user_id")
+    bid_item = models.ForeignKey(Listings,on_delete=models.CASCADE,related_name="bid_item_id")
+    bid_amount = models.FloatField(default=0)

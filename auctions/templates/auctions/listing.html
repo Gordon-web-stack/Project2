@@ -6,7 +6,7 @@
     </head>
 {% endblock %}
 {% block body %}
-
+<h3>{{message}}</h3>
     {% for item in List %}
         <div id = "item_details">
             <p>{{item.List_name}}</p>
@@ -16,14 +16,25 @@
         </div>
 
         {% if item.List_image_url != NULL %}
+            
             <div id = "image">
             <img src={{item.List_image_url}} width="400" height="300" style="align-items:left;">     
             </div> 
         {% endif %} 
 
+           
+
         {% if user.is_authenticated %}
             <br>  
-            <a href="{% url 'wishlist' item.id %}"> {{button_label}} </a>      
+            <a href="{% url 'wishlist' item.id %}"> {{button_label}} </a> 
+            <br>
+            
+            <form method="POST"	action="{% url 'make_bid' item.id %}">
+                {% csrf_token %}
+                <input type="number" placeholder="Bid" name="bid_amount">
+                <input type="Submit" value="Submit">
+            </form>
+            
         {% else %}
             <b1>Loggin to add to wishlist</b1>
         {% endif %}
