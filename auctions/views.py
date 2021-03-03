@@ -89,8 +89,8 @@ def create_listing(request):
         List_description = List_description,
         List_start_price = List_start_price,
         List_image_url = List_image_url,
-        List_category = List_category_get
-       
+        List_category = List_category_get,
+        List_user = request.user
         )
 
         Listing.save()
@@ -100,14 +100,44 @@ def create_listing(request):
         })
 
 def listing(request, id):
-        item = Listings.objects.filter(id = id)
+        item = Listings.objects.get(id = id)
         count_item = 0
         count_item = wishlist.objects.filter(user = request.user, item = id ).count()
-        button = "Add to watchlist"
+        bidings = bids.objects.filter(bid_item_id = id)
+        if count_item == 0:
+            resh = wishlist(item =item , user = request.user)
+            resh.save()
+            button = "remove from watchlist"
+        else:
+            wishlist.objects.filter(user = request.user, item = item ).delete()
+            button = "Add to watchlist"
+
+        if item.List_user == request.user:
+            Listing_poster = True
+        else:
+            Listing_poster = False
+        bid_closed = False
+        bid_message=""
+        for bid in bidings:
+            if bid.bid_won :
+                bid_closed = True
+                win_user = bid.bid_user
+                if request.user == win_user:
+                   bid_message = "You won"
+                else:
+                   bid_message = "bid closed"
+            else:
+                bid_closed = False
+                
+        item = Listings.objects.filter(id = id)
         return render(request,"auctions/listing.html",{
         "List": item,
         "count": count_item,
-        "button_label":button
+        "button_label":button,
+        "listing_poster":Listing_poster,
+        "bid_closed":bid_closed,
+        
+        "bid_message":bid_message
         })
 
 def categories(request):
@@ -129,23 +159,8 @@ def find_category(request,category_id):
     })
 
 def wishlist_add(request,item_id):
-    item = Listings.objects.get(id = item_id)
-    Listing = Listings.objects.filter(id = item_id)
-    count_item = 0
-    count_item = wishlist.objects.filter(user = request.user, item = item ).count()
-    if count_item == 0:
-        resh = wishlist(item =item , user = request.user)
-        resh.save()
-        button = "remove from watchlist"
-    else:
-        wishlist.objects.filter(user = request.user, item = item ).delete()
-        button = "Add to watchlist"
-    
-    return render(request,"auctions/listing.html",{
-        "count":count_item,
-        "List": Listing,
-        "button_label":button
-        })
+    message = ""
+    return listing(request,item_id,message)
     
 def make_bid(request,item_id):
     new_bid_amount = request.POST["bid_amount"]
@@ -179,4 +194,18 @@ def make_bid(request,item_id):
         "List":list_item,
         "message":message
     } )
-            
+
+def close_bid(request, item_id):
+    biddings = bids.objects.filter(bid_item_id = item_id)
+    highest_bid = 0
+    
+    for bid in biddings:
+        if bid.bid_amount > highest_bid:
+            highest_bid = bid.bid_amount
+            highest_bidder = bid.bid_user_id
+        
+
+    winning_bid = bids.objects.get(bid_user_id = highest_bidder, bid_item_id = item_id , bid_amount = highest_bid)
+    winning_bid.bid_won = True
+    winning_bid.save()
+    return listing(request,item_id)

@@ -25,15 +25,27 @@
            
 
         {% if user.is_authenticated %}
-            <br>  
-            <a href="{% url 'wishlist' item.id %}"> {{button_label}} </a> 
-            <br>
             
-            <form method="POST"	action="{% url 'make_bid' item.id %}">
-                {% csrf_token %}
-                <input type="number" placeholder="Bid" name="bid_amount">
-                <input type="Submit" value="Submit">
-            </form>
+            {%if listing_poster == False%}
+
+                {%if bid_closed == False%}
+                    <br>  
+                        <a href="{% url 'wishlist' item.id %}"> {{button_label}} </a> 
+                    <br>
+                    <form method="POST"	action="{% url 'make_bid' item.id %}">
+                        {% csrf_token %}
+                        <input type="number" placeholder="Bid" name="bid_amount">
+                        <input type="Submit" value="Submit">
+                    </form>
+                {% else %}
+                    <b>{{bid_message}}</b>
+                {%endif%}
+
+            {%else%}
+            {%if bid_closed == False%}
+                    <a href="{% url 'close_bid' item.id%}">Close Bid</a>
+                    {%endif%}
+            {%endif%}
             
         {% else %}
             <b1>Loggin to add to wishlist</b1>
